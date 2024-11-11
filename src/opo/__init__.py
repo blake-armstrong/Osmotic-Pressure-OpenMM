@@ -1,8 +1,3 @@
-from .osmotic_reporter import (
-    OsmoticPressureReporter,
-    OsmoticConfig,
-    Plane,
-    Slab,
-    Cylinder,
-    Sphere,
-)
+from .osmotic_reporter import OsmoticPressureReporter
+from .io import OsmoticConfig
+from .geometry import Plane, Slab, Cylinder, Sphere

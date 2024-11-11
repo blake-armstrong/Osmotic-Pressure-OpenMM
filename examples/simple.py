@@ -6,7 +6,9 @@ import openmm.unit as unit
 import openmm.app as app
 from opo import OsmoticPressureReporter, OsmoticConfig, Slab
 
-logging.getLogger().setLevel(logging.DEBUG)
+logging.basicConfig()
+# logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 LOG = logging.getLogger(__name__)
 
@@ -35,6 +37,7 @@ def main():
         compute_interval=1000,
         sample_length=1000,
         tau=1.0,
+        # restart="osmotic.0.out",
     )
 
     # Forcefield paramters for Ar and Kr
@@ -73,26 +76,22 @@ def main():
     sigmaLST_r = (sigmaAR_r).ravel().tolist()
 
     # Create the force object
-    customNonbondedForce = mm.CustomNonbondedForce(
+    cnbf = mm.CustomNonbondedForce(
         "4*eps*((sig/d)^12-(sig/d)^6); d=max(0.1,r); eps=epsilon(type1, type2); sig=sigma(type1, type2)"
     )
-    # customNonbondedForce.setNonbondedMethod(mm.NonbondedForce.CutoffNonPeriodic)
-    customNonbondedForce.setNonbondedMethod(mm.NonbondedForce.CutoffPeriodic)
-    customNonbondedForce.setCutoffDistance(1.0 * unit.nanometer)
-    customNonbondedForce.addTabulatedFunction(
-        "epsilon", mm.Discrete2DFunction(M, M, epsilonLST_r)
-    )
-    customNonbondedForce.addTabulatedFunction(
-        "sigma", mm.Discrete2DFunction(M, M, sigmaLST_r)
-    )
-    customNonbondedForce.addPerParticleParameter("type")
+    # cnbf.setNonbondedMethod(mm.NonbondedForce.CutoffNonPeriodic)
+    cnbf.setNonbondedMethod(mm.NonbondedForce.CutoffPeriodic)
+    cnbf.setCutoffDistance(1.0 * unit.nanometer)
+    cnbf.addTabulatedFunction("epsilon", mm.Discrete2DFunction(M, M, epsilonLST_r))
+    cnbf.addTabulatedFunction("sigma", mm.Discrete2DFunction(M, M, sigmaLST_r))
+    cnbf.addPerParticleParameter("type")
 
     for a in pdb.topology.atoms():
         idx = atom_names.index(a.name)
-        customNonbondedForce.addParticle([idx])
+        cnbf.addParticle([idx])
 
     # Add the force to the system
-    system.addForce(customNonbondedForce)
+    system.addForce(cnbf)
 
     # list_of_solute_pecies = ["Ar"]
     # atoms_list = [
@@ -118,11 +117,11 @@ def main():
         pdb.topology,
         system,
         integrator,
-        mm.Platform.getPlatformByName("CPU"),
+        # mm.Platform.getPlatformByName("CPU"),
         # mm.Platform.getPlatformByName("OpenCL"),
-        # mm.Platform.getPlatformByName("CUDA"),
+        mm.Platform.getPlatformByName("CUDA"),
         # mm.Platform.getPlatformByName("HIP"),
-        # {"Precision": "mixed"},
+        {"Precision": "mixed"},
     )
 
     # Add the velocities to the simulation
@@ -179,11 +178,11 @@ def main():
     simulation.reporters.append(osmotic_config)
 
     # Energy minimisation
-    e = simulation.context.getState(getEnergy=True).getPotentialEnergy()
-    LOG.info("Initial energy: %s", e)
-    simulation.minimizeEnergy(tolerance=0.001)
-    e = simulation.context.getState(getEnergy=True).getPotentialEnergy()
-    LOG.info("Energy after minimisation: %s", e)
+    # e = simulation.context.getState(getEnergy=True).getPotentialEnergy()
+    # LOG.info("Initial energy: %s", e)
+    # simulation.minimizeEnergy(tolerance=0.001)
+    # e = simulation.context.getState(getEnergy=True).getPotentialEnergy()
+    # LOG.info("Energy after minimisation: %s", e)
 
     # Generate the velocities for the simulation
     r = np.random.randint(1, 99999)
