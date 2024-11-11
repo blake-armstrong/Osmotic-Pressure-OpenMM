@@ -1,0 +1,10 @@
+LICENSE
+pyproject.toml
+src/OPO.egg-info/PKG-INFO
+src/OPO.egg-info/SOURCES.txt
+src/OPO.egg-info/dependency_links.txt
+src/OPO.egg-info/requires.txt
+src/OPO.egg-info/top_level.txt
+src/opo/_.py
+src/opo/__init__.py
+src/opo/osmotic_reporter.py

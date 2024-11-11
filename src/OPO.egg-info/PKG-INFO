@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: OPO
+Version: 0.1.dev2+g9219be9.d20241111
+Summary: Custom OpenMM Reporter for maintaining constant osmotic pressure
+Author-email: Paolo Raiteri <p.raiteri@curtin.edu.au>, "Blake I. Armstrong" <blakearmstrong21@gmail.com>
+Keywords: omsotic,pressure,OpenMM
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: parse
