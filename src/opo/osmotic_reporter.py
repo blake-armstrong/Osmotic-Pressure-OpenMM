@@ -81,7 +81,6 @@ class Geometry:
     kappa: float
     species: str | List[str]
     axis: str
-    # _axis: Optional[Axis]
 
     def __post_init__(self):
         self.axis_obj = Axis(self.axis)
@@ -105,7 +104,7 @@ class Plane(Geometry):
 
     def get_area(self, geom_data: GeomData) -> float:
         i, j, _ = self.dirs
-        return geom_data.box[i][i] * geom_data.box[j][j]
+        return float(geom_data.box[i][i] * geom_data.box[j][j])
 
     def get_volume(self, geom_data: GeomData) -> float:
         _ = geom_data
@@ -120,7 +119,7 @@ class Slab(Geometry):
 
     def get_area(self, geom_data: GeomData) -> float:
         i, j, _ = self.dirs
-        return geom_data.box[i][i] * geom_data.box[j][j] * 2
+        return float(geom_data.box[i][i] * geom_data.box[j][j] * 2)
 
     def get_volume(self, geom_data: GeomData) -> float:
         return self.get_area(geom_data) * (geom_data.radius + geom_data.factor0)
@@ -145,11 +144,13 @@ class Cylinder(Geometry):
 
     def get_area(self, geom_data: GeomData) -> float:
         _, _, k = self.dirs
-        return geom_data.box[k][k] * 2 * np.pi * (geom_data.radius + geom_data.factor1)
+        return float(
+            geom_data.box[k][k] * 2 * np.pi * (geom_data.radius + geom_data.factor1)
+        )
 
     def get_volume(self, geom_data: GeomData) -> float:
         _, _, k = self.dirs
-        return (
+        return float(
             geom_data.box[k][k]
             * 2
             * np.pi
@@ -169,7 +170,7 @@ class Sphere(Geometry):
 
     radius: float
     centre: List[float]
-    axis: str = "None"
+    # axis: str = "None"
 
     def __post_init__(self):
         if len(self.centre) != 3:
@@ -223,12 +224,12 @@ class OsmoticConfig:
     gcmd: bool = True
 
     def __post_init__(self):
-        if self.report_interval >= self.compute_interval:
+        if self.report_interval < self.compute_interval:
             raise ValueError(
                 f"Report interval ({self.report_interval}) should be equal to"
-                " or larger than compute interval ({self.compute_interval})"
+                f" or larger than compute interval ({self.compute_interval})"
             )
-        if self.report_interval % self.compute_interval == 0:
+        if self.report_interval % self.compute_interval != 0:
             raise ValueError(
                 "Report interval should be a multiple of compute interval."
             )
@@ -439,7 +440,7 @@ class GCMD:
         return GCMD.Output(
             surface_pressure=surface_pressure,
             average_pressure=self.average_pressure,
-            gcmd_press=gcmd_press,
+            gcmd_press=float(gcmd_press),
             scaled_parm=mu * radius,
             area=area,
             volume=volume,
@@ -472,6 +473,7 @@ class OsmoticPressureReporter:
         )
         self.gcmd = GCMD(self.config, num_particles, timestep)
         self.file.write_line(OsmoticPressureReporter.HEADER)
+        LOG.debug("Successfully initialised osmotic pressure report.")
 
     @staticmethod
     def get_system(context: mm.Context) -> mm.System:

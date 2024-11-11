@@ -1,5 +1,7 @@
+.gitignore
 LICENSE
 pyproject.toml
+examples/simple.py
 src/OPO.egg-info/PKG-INFO
 src/OPO.egg-info/SOURCES.txt
 src/OPO.egg-info/dependency_links.txt
