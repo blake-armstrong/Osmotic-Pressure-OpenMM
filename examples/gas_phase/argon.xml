@@ -1,0 +1,16 @@
+<ForceField>
+ <AtomTypes>
+  <Type name="Ar" class="Ar" element="Ar" mass="39.95"/>
+ </AtomTypes>
+
+ <Residues>
+  <Residue name="Ar">
+   <Atom name="Ar" type="Ar"/>
+  </Residue>
+ </Residues>
+
+ <NonbondedForce coulomb14scale="0." lj14scale="0.">
+  <Atom type="Ar" charge="0.0" sigma="0.3405" epsilon="0.9960306715099999"/>
+ </NonbondedForce>
+
+</ForceField>

@@ -10,7 +10,7 @@ from .geometry import GeomData, Plane
 class GCMD:
     PRESS_CF0 = 16.605388  # <- convert 'kJ/mole/nm^3' to 'bar'
     PRESS_CF1 = 10  # <- convert 'kJ/L' to 'bar'
-    CONC_CF = 0.16606  # <- convert 'atm/nm^3' to 'mol/L'
+    CONC_CF = 1.66053904  # <- convert 'atm/nm^3' to 'mol/L'
 
     @dataclass
     class Output:

@@ -236,6 +236,8 @@ class GeometryInterpreter:
     def _process_cylinder(self, cylinder: Cylinder) -> GeomForceInfo:
         try:
             a0, a1 = cylinder.axis_obj.orthog()
+            a0 = a0.lower()
+            a1 = a1.lower()
         except Exception as e:
             raise RuntimeError(
                 f"Could not get plane orthogonal to axis '{cylinder.axis_obj.axis}'"
