@@ -46,10 +46,14 @@ class OsmoticConfig:
 
 
 class File:
-    def __init__(self, filename, method="a"):
+    def __init__(self, filename):
         self.filename = filename
         self.file = None
+        self.method = "w"
+
+    def __call__(self, method: str):
         self.method = method
+        return self
 
     def __enter__(self):
         self.file = open(self.filename, self.method, encoding="utf-8")

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: OPO
-Version: 0.1.dev5+g9124092.d20241111
+Version: 0.1.dev6+gf0ad3d9
 Summary: Custom OpenMM Reporter for maintaining constant osmotic pressure
 Author-email: Paolo Raiteri <p.raiteri@curtin.edu.au>, "Blake I. Armstrong" <blakearmstrong21@gmail.com>
 Keywords: omsotic,pressure,OpenMM

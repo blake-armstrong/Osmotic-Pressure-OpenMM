@@ -8,8 +8,8 @@ src/OPO.egg-info/SOURCES.txt
 src/OPO.egg-info/dependency_links.txt
 src/OPO.egg-info/requires.txt
 src/OPO.egg-info/top_level.txt
-src/opo/_.py
 src/opo/__init__.py
+src/opo/gcmd.py
+src/opo/geometry.py
+src/opo/io.py
 src/opo/osmotic_reporter.py
-src/opo/__pycache__/__init__.cpython-312.pyc
-src/opo/__pycache__/osmotic_reporter.cpython-312.pyc

@@ -20,7 +20,7 @@ class OsmoticPressureReporter:
     HEADER = "{:>12} {:>12} {:>12} {:>12} {:>12} {:>12} {:>12} {:>12}".format(
         "Time", "Pi(t)", "<Pi>", "Pi(gcmd)", "Parm", "Area", "Volume", "Press"
     )
-    FMT = "{:12.1f} {:12.5f} {:12.5f} {:12.5f} {:12.5f} {:12.5f} {:12.5f} {:12.5f}"
+    FMT = "{:12.1f} {:12.5f} {:12.5f} {:12.5f} {:12.5f} {:12.5e} {:12.5e} {:12.5f}"
 
     def __init__(
         self, context: mm.Context, topology: app.Topology, config: OsmoticConfig
@@ -42,7 +42,7 @@ class OsmoticPressureReporter:
         self.gcmd = GCMD(self.config, num_particles, timestep)
         if self.config.restart:
             self.restart()
-        with self.file as f:
+        with self.file(method="w") as f:
             f.write_line(OsmoticPressureReporter.HEADER)
         LOG.debug("Successfully initialised osmotic pressure report.")
 
@@ -91,8 +91,8 @@ class OsmoticPressureReporter:
         return force_group
 
     def restart(self) -> None:
-        restart_file = File(self.config.restart, method="r")
-        with restart_file as f:
+        restart_file = File(self.config.restart)
+        with restart_file(method="r") as f:
             last_line = f.get_last_line()
         LOG.debug("Last line: '%s'", last_line)
         parsed = parse.parse(
@@ -132,7 +132,7 @@ class OsmoticPressureReporter:
         output = self.gcmd.report(forces, box, radius)
         if simulation.currentStep % self.config.report_interval != 0:
             return
-        with self.file as f:
+        with self.file(method="a") as f:
             f.write_line(OsmoticPressureReporter.FMT.format(stime, *output.format()))
         if not self.config.gcmd:
             return

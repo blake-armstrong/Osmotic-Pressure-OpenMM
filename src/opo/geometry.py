@@ -58,13 +58,11 @@ class GeomForceInfo:
 class Geometry:
     kappa: float
     species: str | List[str]
-    axis: str
+    # axis: str
 
     def __post_init__(self):
-        self.axis_obj = Axis(self.axis)
-        self.dirs = self.axis_obj.directions()
         if not isinstance(self.species, list):
-            self.species = [self.species]
+            self.species = [self.species,]
 
     @abstractmethod
     def get_area(self, geom_data: GeomData) -> float:
@@ -80,6 +78,12 @@ class Plane(Geometry):
     pos: float
     axis: str
 
+    def __post_init__(self):
+        super().__post_init__()
+        self.axis_obj = Axis(self.axis)
+        self.dirs = self.axis_obj.directions()
+
+
     def get_area(self, geom_data: GeomData) -> float:
         i, j, _ = self.dirs
         return float(geom_data.box[i][i] * geom_data.box[j][j])
@@ -94,6 +98,11 @@ class Slab(Geometry):
     width: float
     centre: float
     axis: str
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.axis_obj = Axis(self.axis)
+        self.dirs = self.axis_obj.directions()
 
     def get_area(self, geom_data: GeomData) -> float:
         i, j, _ = self.dirs
@@ -117,6 +126,8 @@ class Cylinder(Geometry):
 
     def __post_init__(self):
         super().__post_init__()
+        self.axis_obj = Axis(self.axis)
+        self.dirs = self.axis_obj.directions()
         if len(self.centre) != 2:
             raise ValueError("centre arg for Cylinder should contain two elements.")
 
@@ -148,9 +159,9 @@ class Sphere(Geometry):
 
     radius: float
     centre: List[float]
-    # axis: str = "None"
 
     def __post_init__(self):
+        super().__post_init__()
         if len(self.centre) != 3:
             raise ValueError("centre arg for Cylinder should contain three elements.")
 
