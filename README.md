@@ -152,7 +152,7 @@ Where:
 The package implements the following key components:
 
 1. `OsmoticPressureReporter`: Main class for pressure calculation and reporting
-2. `GCMD`: Implements the Gibbs-ensemble Constant Molecular Dynamics algorithm
+2. `GCMD`: Grand Canonical Molecular Dynamics algorithm
 3. `GeometryInterpreter`: Handles different geometry types and force calculations
 4. `OsmoticConfig`: Configuration management for the simulation
 
@@ -167,6 +167,6 @@ The package includes example scripts demonstrating usage with different geometri
 Each example shows how to:
 - Set up the simulation parameters
 - Configure the geometry
-- Initialize the osmotic pressure reporter
+- Initialise the osmotic pressure reporter
 - Run the simulation
 
