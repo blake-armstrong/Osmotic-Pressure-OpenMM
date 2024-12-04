@@ -284,7 +284,7 @@ def set_scale_mu(geometry: GeometryType) -> Callable:
     scalings = {
         Plane: lambda mu: mu,
         Slab: lambda mu: mu,
-        Cylinder: lambda mu: mu**(2/3),
+        Cylinder: lambda mu: mu**(1/2),
         Sphere: lambda mu: mu**(1/3),
     }
     try:
