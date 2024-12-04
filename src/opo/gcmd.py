@@ -4,7 +4,7 @@ import numpy as np
 import openmm.unit as unit
 
 from .io import OsmoticConfig
-from .geometry import GeomData, Plane
+from .geometry import GeomData, Plane, set_scale_mu
 
 
 class GCMD:
@@ -46,8 +46,7 @@ class GCMD:
         self.counter: int = 1
         self.average_pressure: float = 0.0
         self.osmotic_pressure: np.ndarray = np.zeros(self.config.sample_length)
-        if self.config.restart:
-            self.restart()
+        self.scale_mu = set_scale_mu(self.geometry)
 
     @staticmethod
     def berendsen(
@@ -58,10 +57,6 @@ class GCMD:
         compressibility: float = 0.01,
     ):
         return 1.0 - compressibility * timestep / tau * (external_press - gcmd_press)
-
-    def restart(self):
-        # TODO:
-        pass
 
     def report(self, forces: np.ndarray, box: np.ndarray, radius: float):
         f = np.sum(np.sqrt(np.einsum("ij,ij->i", forces, forces)))
@@ -90,13 +85,13 @@ class GCMD:
         predicted_press = conc * self.kt * GCMD.PRESS_CF1
         mu = 1.0
         if self.config.gcmd:
-            mu = self.berendsen(
+            mu = self.scale_mu(self.berendsen(
                 self.timestep,
                 self.config.tau,
                 self.config.osmotic_pressure,
                 gcmd_press,
                 self.config.compressibility,
-            )
+            ))
         self.counter += 1
 
         return GCMD.Output(

@@ -15,7 +15,7 @@ class OsmoticConfig:
     tau: float = 1.0
     file: str = "osmotic.out"
     restart: Optional[str] = None
-    compressibility: float = 0.01
+    compressibility: float = 0.1
     compute_interval: int = 1000
     report_interval: int = 1000
     sample_length: int = 1000

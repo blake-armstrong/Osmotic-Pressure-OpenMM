@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Callable
 import logging
 from abc import abstractmethod
 
@@ -284,3 +284,15 @@ class GeometryInterpreter:
             return self._process_geometry()
         except Exception as e:
             raise RuntimeError("Could not create osmotic pressure force object.") from e
+
+def set_scale_mu(geometry: GeometryType) -> Callable:
+    scalings = {
+        Plane: lambda mu: mu,
+        Slab: lambda mu: mu,
+        Cylinder: lambda mu: mu**(2/3),
+        Sphere: lambda mu: mu**(1/3),
+    }
+    try:
+        return scalings[type(geometry)]
+    except Exception as e:
+        raise ValueError(f"Could not determine mu scaling of geometry type: '{type(geometry)}'") from e
