@@ -8,13 +8,8 @@ import numpy as np
 import openmm as mm
 import openmm.app as app
 
-# from .gcmd import GCMD.D0 as D0
-
 D0 = "d0"
-
-
 LOG = logging.getLogger(__name__)
-
 
 class Axis:
     def __init__(self, axis: str):
