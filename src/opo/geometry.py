@@ -104,7 +104,7 @@ class Slab(Geometry):
         return float(geom_data.box[i][i] * geom_data.box[j][j] * 2)
 
     def get_volume(self, geom_data: GeomData) -> float:
-        return self.get_area(geom_data) * (geom_data.radius + geom_data.factor0)
+        return self.get_area(geom_data) * (geom_data.radius + geom_data.factor1)
 
 
 @dataclass
