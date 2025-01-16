@@ -75,9 +75,13 @@ class OsmoticPressureReporter:
     def get_force_group(
         self, osmotic_force: mm.CustomExternalForce, system: mm.System
     ) -> Set[int]:
+        for n, f in enumerate(system.getForces()):
+            LOG.debug("Force: %s set to force group %s", f.getName(), n+1)
+            f.setForceGroup(n + 1)
         force_name = osmotic_force.getName()
         force_group = set()
         for force in system.getForces():
+            LOG.debug("Force: %s - force group %s", force.getName(), force.getForceGroup())
             if force.getName() == force_name:
                 force_group.add(force.getForceGroup())
         # break
@@ -111,8 +115,6 @@ class OsmoticPressureReporter:
 
         self.context.setParameter(D0, output.scaled_parm)
         LOG.debug("Successfully restarted from file: '%s", restart_file.filename)
-
-        # TODO: test!!!
 
     def describe_next_report(self, simulation: app.Simulation):
         steps = (
