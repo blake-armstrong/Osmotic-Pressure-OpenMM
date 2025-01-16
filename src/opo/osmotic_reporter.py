@@ -33,8 +33,8 @@ class OsmoticPressureReporter:
         osmotic_force = self._generate_osmotic_force()
         num_particles = self.get_num_particles(osmotic_force)
         system.addForce(osmotic_force)
-        self.context.reinitialize(preserveState=True)
         self.force_group = self.get_force_group(osmotic_force, system)
+        self.context.reinitialize(preserveState=True)
         self.file = File(self.config.file)
         timestep = (
             self.context.getIntegrator().getStepSize().value_in_unit(unit.picosecond)  # type: ignore
@@ -76,7 +76,7 @@ class OsmoticPressureReporter:
         self, osmotic_force: mm.CustomExternalForce, system: mm.System
     ) -> Set[int]:
         for n, f in enumerate(system.getForces()):
-            LOG.debug("Force: %s set to force group %s", f.getName(), n+1)
+            LOG.debug("Force: %s set to force group %s", f.getName(), n + 1)
             f.setForceGroup(n + 1)
         force_name = osmotic_force.getName()
         force_group = set()
@@ -89,7 +89,6 @@ class OsmoticPressureReporter:
 
         if not force_group:
             raise ValueError("Found no force for osmotic calculation.")
-
         LOG.debug("Osmotic force group: %s", force_group)
 
         return force_group
