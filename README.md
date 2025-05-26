@@ -71,7 +71,8 @@ plane = Plane(
     kappa=1000,      # Force constant
     species="Ar",    # Particle type
     pos=45,          # Position along axis
-    axis="z"         # Normal axis
+    axis="z",        # Normal axis
+    direction="-"    # Solute localised below plane (-), solute localised above plane (+)
 )
 ```
 
