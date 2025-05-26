@@ -72,11 +72,17 @@ class Geometry:
 class Plane(Geometry):
     pos: float
     axis: str
+    direction: str = "-"
 
     def __post_init__(self):
         super().__post_init__()
         self.axis_obj = Axis(self.axis)
         self.dirs = self.axis_obj.directions()
+        if self.direction not in ["+", "-"]:
+            raise RuntimeError(f"Unrecognised direction for plane: {self.direction}. Expected '+' or '-'.")
+        LOG.debug(f"Plane direction is {self.direction}")
+        map = {"-" : "Solute localised below plane.", "+" : "Solute localised above plane."}
+        LOG.debug(f"{self.direction} means that: {map[self.direction]}")
 
 
     def get_area(self, geom_data: GeomData) -> float:
@@ -215,7 +221,8 @@ class GeometryInterpreter:
         return atom_index_list
 
     def _process_plane(self, plane: Plane) -> GeomForceInfo:
-        expression = f"0.5*k*(max(0,{plane.axis_obj.axis}-{D0}))^2)"
+        dir_map = {"-": "max", "+": "min"}
+        expression = f"0.5*k*({dir_map[plane.direction]}(0,({plane.axis_obj.axis.lower()}-{D0})))^2"
         d0 = plane.pos
         global_parms = dict({})
         return GeomForceInfo(expression=expression, d0=d0, global_parms=global_parms)

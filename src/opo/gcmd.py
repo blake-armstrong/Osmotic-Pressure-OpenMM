@@ -5,7 +5,9 @@ import openmm.unit as unit
 
 from .io import OsmoticConfig
 from .geometry import GeomData, Plane, set_scale_mu
+import logging
 
+LOG = logging.getLogger(__name__)
 
 class GCMD:
     PRESS_CF0 = 16.605388  # <- convert 'kJ/mole/nm^3' to 'bar'
@@ -92,6 +94,8 @@ class GCMD:
                 gcmd_press,
                 self.config.compressibility,
             ))
+            if isinstance(self.config.geometry, Plane) and self.config.geometry.direction == "+":
+               mu = 2.0 - mu 
         self.counter += 1
 
         return GCMD.Output(
