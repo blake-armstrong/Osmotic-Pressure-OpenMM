@@ -1,4 +1,6 @@
-# OpenMM Osmotic Pressure Calculator
+# OpenMM Osmotic Pressure Regulator
+
+[![DOI](https://zenodo.org/badge/884747574.svg)](https://doi.org/10.5281/zenodo.15515783)
 
 A Python package for calculating osmotic pressure in molecular dynamics simulations using OpenMM. This package allows you to add osmotic pressure forces to your simulations with various geometries including planes, slabs, cylinders, and spheres.
 
